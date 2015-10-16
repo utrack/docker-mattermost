@@ -1,4 +1,4 @@
-FROM sameersbn/ubuntu:14.04.20150825
+FROM ubuntu:14.04
 MAINTAINER u@colonpipe.biz
 
 ENV APP_VER=1.0.0
@@ -10,11 +10,12 @@ ENV TEAM_NAME=Mattermost
 
 EXPOSE 80
 
-COPY assets /assets
-RUN bash /assets/install.sh
+COPY assets/ /assets/
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y curl 
+RUN bash /assets/setup.sh
 
-EXPOSE 80:tcp
+EXPOSE 80/tcp
 
 VOLUME ["/data","/config"]
-WORKDIR /assets
-ENTRYPOINT["/assets/start.sh"]
+#RUN chown mattermost /var/log/supervisor
+CMD ["/assets/start.sh"]
